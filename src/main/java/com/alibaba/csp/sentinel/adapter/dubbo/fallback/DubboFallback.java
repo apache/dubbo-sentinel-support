@@ -13,23 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.csp.sentinel.adapter.dubbo;
+package com.alibaba.csp.sentinel.adapter.dubbo.fallback;
 
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.dubbo.rpc.Invocation;
+import com.alibaba.dubbo.rpc.Invoker;
+import com.alibaba.dubbo.rpc.Result;
 
 /**
+ * Fallback handler for Dubbo services.
+ *
  * @author Eric Zhao
  */
-public final class DubboUtils {
+public interface DubboFallback {
 
-    public static final String DUBBO_APPLICATION_KEY = "dubboApplication";
-
-    public static String getApplication(Invocation invocation, String defaultValue) {
-        if (invocation == null || invocation.getAttachments() == null) {
-            throw new IllegalArgumentException("Bad invocation instance");
-        }
-        return invocation.getAttachment(DUBBO_APPLICATION_KEY, defaultValue);
-    }
-
-    private DubboUtils() {}
+    /**
+     * Handle the block exception and provide fallback result.
+     *
+     * @param invoker Dubbo invoker
+     * @param invocation Dubbo invocation
+     * @param ex block exception
+     * @return fallback result
+     */
+    Result handle(Invoker<?> invoker, Invocation invocation, BlockException ex);
 }
