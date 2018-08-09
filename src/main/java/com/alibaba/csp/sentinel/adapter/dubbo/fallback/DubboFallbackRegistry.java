@@ -22,6 +22,7 @@ package com.alibaba.csp.sentinel.adapter.dubbo.fallback;
  * give fallback result in most circumstances.
  *
  * @author Eric Zhao
+ * @since 0.1.1
  */
 public final class DubboFallbackRegistry {
 

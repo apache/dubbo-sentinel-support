@@ -24,6 +24,7 @@ import com.alibaba.dubbo.rpc.Result;
  * Fallback handler for Dubbo services.
  *
  * @author Eric Zhao
+ * @since 0.1.1
  */
 public interface DubboFallback {
 

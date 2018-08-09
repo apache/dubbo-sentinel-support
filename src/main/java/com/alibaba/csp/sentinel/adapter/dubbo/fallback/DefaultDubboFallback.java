@@ -23,6 +23,7 @@ import com.alibaba.dubbo.rpc.Result;
 
 /**
  * @author Eric Zhao
+ * @since 0.1.1
  */
 public class DefaultDubboFallback implements DubboFallback {
 
