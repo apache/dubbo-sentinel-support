@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.alibaba.csp</groupId>
         <artifactId>sentinel-adapter</artifactId>
-        <version>1.3.0-GA</version>
+        <version>1.4.2</version>
     </parent>
     <artifactId>sentinel-dubbo-adapter</artifactId>
     <packaging>jar</packaging>

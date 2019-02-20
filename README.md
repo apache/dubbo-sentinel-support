@@ -15,6 +15,9 @@ To use Sentinel Dubbo Adapter, you can simply add the following dependency to yo
 </dependency>
 ```
 
+> Note: currently this adapter is not compatible with Dubbo 2.7.x due to its package renaming.
+We are working to support the latest Dubbo version.
+
 The Sentinel filters are **enabled by default**. Once you add the dependency,
 the Dubbo services and methods will become protected resources in Sentinel,
 which can leverage Sentinel's flow control and guard ability when rules are configured.
