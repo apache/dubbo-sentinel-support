@@ -1,22 +1,22 @@
-# Sentinel Dubbo Adapter
+# Sentinel Apache Dubbo Adapter
 
-> Note: 中文文档请见[此处](https://github.com/alibaba/Sentinel/wiki/%E4%B8%BB%E6%B5%81%E6%A1%86%E6%9E%B6%E7%9A%84%E9%80%82%E9%85%8D#dubbo)。
+> Note: 中文文档请见[此处](https://github.com/alibaba/Sentinel/wiki/主流框架的适配#dubbo)。
 
 Sentinel Dubbo Adapter provides service consumer filter and provider filter
-for [Dubbo](http://dubbo.io/) services. 
+for [Apache Dubbo](https://dubbo.apache.org/en-us/) services.
+
+**Note: This adapter only supports Apache Dubbo 2.7.x and above.** For legacy `com.alibaba:dubbo` 2.6.x,
+please use `sentinel-dubbo-adapter` module instead.
 
 To use Sentinel Dubbo Adapter, you can simply add the following dependency to your `pom.xml`:
 
 ```xml
 <dependency>
     <groupId>com.alibaba.csp</groupId>
-    <artifactId>sentinel-dubbo-adapter</artifactId>
+    <artifactId>sentinel-apache-dubbo-adapter</artifactId>
     <version>x.y.z</version>
 </dependency>
 ```
-
-> Note: currently this adapter is not compatible with Dubbo 2.7.x due to its package renaming.
-We are working to support the latest Dubbo version.
 
 The Sentinel filters are **enabled by default**. Once you add the dependency,
 the Dubbo services and methods will become protected resources in Sentinel,
@@ -31,7 +31,7 @@ If you don't want the filters enabled, you can manually disable them. For exampl
 <dubbo:provider filter="-sentinel.dubbo.provider.filter"/>
 ```
 
-For more details of Dubbo filter, see [here](https://dubbo.incubator.apache.org/#/docs/dev/impls/filter.md?lang=en-us).
+For more details of Dubbo filter, see [here](http://dubbo.apache.org/en-us/docs/dev/impls/filter.html).
 
 ## Dubbo resources
 
@@ -65,4 +65,4 @@ flow control, degrade or system load protection. You can implement your own `Dub
 and then register to `DubboFallbackRegistry`. If no fallback is configured, Sentinel will wrap the `BlockException`
 then directly throw it out.
 
-Besides, we can also leverage [Dubbo mock mechanism](http://dubbo.apache.org/#!/docs/user/demos/local-mock.md?lang=en-us) to provide fallback implementation of degraded Dubbo services.
+Besides, we can also leverage [Dubbo mock mechanism](http://dubbo.apache.org/en-us/docs/user/demos/local-mock.html) to provide fallback implementation of degraded Dubbo services.

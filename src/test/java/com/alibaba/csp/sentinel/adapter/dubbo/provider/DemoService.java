@@ -13,23 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.csp.sentinel.adapter.dubbo.fallback;
-
-import com.alibaba.csp.sentinel.slots.block.BlockException;
-import com.alibaba.csp.sentinel.slots.block.SentinelRpcException;
-
-import org.apache.dubbo.rpc.Invocation;
-import org.apache.dubbo.rpc.Invoker;
-import org.apache.dubbo.rpc.Result;
+package com.alibaba.csp.sentinel.adapter.dubbo.provider;
 
 /**
- * @author Eric Zhao
+ * @author leyou
  */
-public class DefaultDubboFallback implements DubboFallback {
-
-    @Override
-    public Result handle(Invoker<?> invoker, Invocation invocation, BlockException ex) {
-        // Just wrap and throw the exception.
-        throw new SentinelRpcException(ex);
-    }
+public interface DemoService {
+    String sayHello(String name, int n);
 }

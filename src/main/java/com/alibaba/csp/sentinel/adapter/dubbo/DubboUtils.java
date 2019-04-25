@@ -15,20 +15,39 @@
  */
 package com.alibaba.csp.sentinel.adapter.dubbo;
 
-import com.alibaba.dubbo.rpc.Invocation;
+import org.apache.dubbo.rpc.Invocation;
+import org.apache.dubbo.rpc.Invoker;
 
 /**
  * @author Eric Zhao
  */
 public final class DubboUtils {
 
-    public static final String DUBBO_APPLICATION_KEY = "dubboApplication";
+    public static final String SENTINEL_DUBBO_APPLICATION_KEY = "dubboApplication";
 
     public static String getApplication(Invocation invocation, String defaultValue) {
         if (invocation == null || invocation.getAttachments() == null) {
             throw new IllegalArgumentException("Bad invocation instance");
         }
-        return invocation.getAttachment(DUBBO_APPLICATION_KEY, defaultValue);
+        return invocation.getAttachment(SENTINEL_DUBBO_APPLICATION_KEY, defaultValue);
+    }
+
+    public static String getResourceName(Invoker<?> invoker, Invocation invocation) {
+        StringBuilder buf = new StringBuilder(64);
+        buf.append(invoker.getInterface().getName())
+            .append(":")
+            .append(invocation.getMethodName())
+            .append("(");
+        boolean isFirst = true;
+        for (Class<?> clazz : invocation.getParameterTypes()) {
+            if (!isFirst) {
+                buf.append(",");
+            }
+            buf.append(clazz.getName());
+            isFirst = false;
+        }
+        buf.append(")");
+        return buf.toString();
     }
 
     private DubboUtils() {}

@@ -15,14 +15,17 @@
  */
 package com.alibaba.csp.sentinel.adapter.dubbo.fallback;
 
+import com.alibaba.csp.sentinel.util.AssertUtil;
+
 /**
- * Global fallback registry for Dubbo.
+ * <p>Global fallback registry for Dubbo.</p>
  *
- * Note: Degrading is mainly designed for consumer. The provider should not
+ * <p>
+ * Note: Circuit breaking is mainly designed for consumer. The provider should not
  * give fallback result in most circumstances.
+ * </p>
  *
  * @author Eric Zhao
- * @since 0.1.1
  */
 public final class DubboFallbackRegistry {
 
@@ -34,6 +37,7 @@ public final class DubboFallbackRegistry {
     }
 
     public static void setConsumerFallback(DubboFallback consumerFallback) {
+        AssertUtil.notNull(consumerFallback, "consumerFallback cannot be null");
         DubboFallbackRegistry.consumerFallback = consumerFallback;
     }
 
@@ -42,6 +46,7 @@ public final class DubboFallbackRegistry {
     }
 
     public static void setProviderFallback(DubboFallback providerFallback) {
+        AssertUtil.notNull(providerFallback, "providerFallback cannot be null");
         DubboFallbackRegistry.providerFallback = providerFallback;
     }
 

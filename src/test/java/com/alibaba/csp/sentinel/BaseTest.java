@@ -13,29 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.csp.sentinel.adapter.dubbo.fallback;
+package com.alibaba.csp.sentinel;
 
-import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.csp.sentinel.slots.clusterbuilder.ClusterBuilderSlot;
 
-import org.apache.dubbo.rpc.Invocation;
-import org.apache.dubbo.rpc.Invoker;
-import org.apache.dubbo.rpc.Result;
+import org.apache.dubbo.rpc.RpcContext;
 
 /**
- * Fallback handler for Dubbo services.
+ * Base test class, provide common methods for subClass
+ * The package is same as CtSph, to call CtSph.resetChainMap() method for test
  *
- * @author Eric Zhao
+ * Note: Only for test. DO NOT USE IN PRODUCTION!
+ *
+ * @author cdfive
  */
-@FunctionalInterface
-public interface DubboFallback {
+public class BaseTest {
 
     /**
-     * Handle the block exception and provide fallback result.
-     *
-     * @param invoker Dubbo invoker
-     * @param invocation Dubbo invocation
-     * @param ex block exception
-     * @return fallback result
+     * Clean up resources for context, clusterNodeMap, processorSlotChainMap
      */
-    Result handle(Invoker<?> invoker, Invocation invocation, BlockException ex);
+    protected static void cleanUpAll() {
+        RpcContext.removeContext();
+        ClusterBuilderSlot.getClusterNodeMap().clear();
+        CtSph.resetChainMap();
+    }
 }

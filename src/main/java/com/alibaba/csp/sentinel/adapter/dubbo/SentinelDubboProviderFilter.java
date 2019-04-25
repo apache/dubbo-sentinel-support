@@ -23,30 +23,31 @@ import com.alibaba.csp.sentinel.adapter.dubbo.fallback.DubboFallbackRegistry;
 import com.alibaba.csp.sentinel.context.ContextUtil;
 import com.alibaba.csp.sentinel.log.RecordLog;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
-import com.alibaba.csp.sentinel.slots.block.SentinelRpcException;
-import com.alibaba.dubbo.common.extension.Activate;
-import com.alibaba.dubbo.rpc.Filter;
-import com.alibaba.dubbo.rpc.Invocation;
-import com.alibaba.dubbo.rpc.Invoker;
-import com.alibaba.dubbo.rpc.Result;
-import com.alibaba.dubbo.rpc.RpcException;
+
+import org.apache.dubbo.common.extension.Activate;
+import org.apache.dubbo.rpc.Filter;
+import org.apache.dubbo.rpc.Invocation;
+import org.apache.dubbo.rpc.Invoker;
+import org.apache.dubbo.rpc.Result;
+import org.apache.dubbo.rpc.RpcException;
 
 /**
- * <p>Dubbo service provider filter for Sentinel. Auto activated by default.</p>
+ * <p>Apache Dubbo service provider filter that enables integration with Sentinel. Auto activated by default.</p>
+ * <p>Note: this only works for Apache Dubbo 2.7.x or above version.</p>
  *
  * If you want to disable the provider filter, you can configure:
  * <pre>
  * &lt;dubbo:provider filter="-sentinel.dubbo.provider.filter"/&gt;
  * </pre>
  *
- * @author leyou
+ * @author Carpenter Lee
  * @author Eric Zhao
  */
 @Activate(group = "provider")
-public class SentinelDubboProviderFilter extends AbstractDubboFilter implements Filter {
+public class SentinelDubboProviderFilter implements Filter {
 
     public SentinelDubboProviderFilter() {
-        RecordLog.info("Sentinel Dubbo provider filter initialized");
+        RecordLog.info("Sentinel Apache Dubbo provider filter initialized");
     }
 
     @Override
@@ -57,21 +58,27 @@ public class SentinelDubboProviderFilter extends AbstractDubboFilter implements 
         Entry interfaceEntry = null;
         Entry methodEntry = null;
         try {
-            String resourceName = getResourceName(invoker, invocation);
+            String resourceName = DubboUtils.getResourceName(invoker, invocation);
             String interfaceName = invoker.getInterface().getName();
+            // Only need to create entrance context at provider side, as context will take effect
+            // at entrance of invocation chain only (for inbound traffic).
             ContextUtil.enter(resourceName, application);
             interfaceEntry = SphU.entry(interfaceName, EntryType.IN);
             methodEntry = SphU.entry(resourceName, EntryType.IN, 1, invocation.getArguments());
 
             Result result = invoker.invoke(invocation);
             if (result.hasException()) {
-                Tracer.trace(result.getException());
+                Throwable e = result.getException();
+                // Record common exception.
+                Tracer.traceEntry(e, interfaceEntry);
+                Tracer.traceEntry(e, methodEntry);
             }
             return result;
         } catch (BlockException e) {
             return DubboFallbackRegistry.getProviderFallback().handle(invoker, invocation, e);
         } catch (RpcException e) {
-            Tracer.trace(e);
+            Tracer.traceEntry(e, interfaceEntry);
+            Tracer.traceEntry(e, methodEntry);
             throw e;
         } finally {
             if (methodEntry != null) {

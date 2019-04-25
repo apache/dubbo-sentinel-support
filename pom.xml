@@ -4,33 +4,51 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.alibaba.csp</groupId>
-        <artifactId>sentinel-adapter</artifactId>
-        <version>1.4.2</version>
-    </parent>
-    <artifactId>sentinel-dubbo-adapter</artifactId>
+    <groupId>com.alibaba.csp</groupId>
+    <artifactId>sentinel-apache-dubbo-adapter</artifactId>
+    <version>1.6.0</version>
     <packaging>jar</packaging>
+
+    <properties>
+        <java.source.version>1.8</java.source.version>
+        <java.target.version>1.8</java.target.version>
+
+        <sentinel.version>1.6.0</sentinel.version>
+        <apache.dubbo.version>2.7.1</apache.dubbo.version>
+
+        <junit.version>4.12</junit.version>
+        <mockito.version>2.21.0</mockito.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-core</artifactId>
+            <version>${sentinel.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
+            <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo</artifactId>
+            <version>${apache.dubbo.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
+            <version>1.2.57</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
