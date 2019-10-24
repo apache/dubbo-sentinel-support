@@ -21,6 +21,8 @@ import java.util.HashMap;
 import com.alibaba.csp.sentinel.adapter.dubbo.DubboUtils;
 import com.alibaba.csp.sentinel.adapter.dubbo.provider.DemoService;
 
+import org.apache.dubbo.common.Constants;
+import org.apache.dubbo.common.URL;
 import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.Invoker;
 import org.junit.Test;
@@ -64,7 +66,11 @@ public class DubboUtilsTest {
     @Test
     public void testGetResourceName() {
         Invoker invoker = mock(Invoker.class);
-        when(invoker.getInterface()).thenReturn(DemoService.class);
+        URL url = URL.valueOf("dubbo://127.0.0.1:2181")
+                .addParameter(Constants.VERSION_KEY,"1.0.0")
+                .addParameter(Constants.GROUP_KEY,"grp1")
+                .addParameter(Constants.INTERFACE_KEY,DemoService.class.getName());
+        when(invoker.getUrl()).thenReturn(url);
 
         Invocation invocation = mock(Invocation.class);
         Method method = DemoService.class.getMethods()[0];
@@ -73,6 +79,6 @@ public class DubboUtilsTest {
 
         String resourceName = DubboUtils.getResourceName(invoker, invocation);
 
-        assertEquals("com.alibaba.csp.sentinel.adapter.dubbo.provider.DemoService:sayHello(java.lang.String,int)", resourceName);
+        assertEquals("grp1*com.alibaba.csp.sentinel.adapter.dubbo.provider.DemoService:1.0.0:sayHello(java.lang.String,int)", resourceName);
     }
 }
