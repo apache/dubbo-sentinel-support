@@ -14,7 +14,7 @@
         <java.target.version>1.8</java.target.version>
 
         <sentinel.version>1.6.0</sentinel.version>
-        <apache.dubbo.version>2.7.1</apache.dubbo.version>
+        <apache.dubbo.version>2.7.21</apache.dubbo.version>
 
         <junit.version>4.12</junit.version>
         <mockito.version>2.21.0</mockito.version>
